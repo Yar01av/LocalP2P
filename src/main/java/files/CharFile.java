@@ -1,8 +1,8 @@
 package files;
 
-import files.shards.MapShard;
+import com.sun.istack.internal.NotNull;
+import files.shards.UnitShard;
 import files.shards.Shard;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -66,8 +66,8 @@ class CharFile extends File {
     }
 
     @Override
-    MapShard[] splitToShards(int nOutput) {
-        return ;
+    UnitShard[] splitToShards(int nOutput) {
+        return null;
     }
 
     @Override

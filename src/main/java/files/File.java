@@ -1,6 +1,6 @@
 package files;
 
-import files.shards.MapShard;
+import files.shards.UnitShard;
 import files.shards.Shard;
 
 import java.util.UUID;
@@ -57,5 +57,5 @@ abstract class File {
      * @param nOutput - number of shards to split into
      * @output - List of shards
      */
-    abstract MapShard[] splitToShards(int nOutput);
+    abstract UnitShard[] splitToShards(int nOutput);
 }
