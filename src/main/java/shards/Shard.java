@@ -1,4 +1,4 @@
-package files.shards;
+package shards;
 
 
 /*
@@ -6,9 +6,9 @@ package files.shards;
  * input and output that can be put into and taken out of the Shard instance.
  */
 abstract public class Shard<T> {
-    private final int parentID;
+    private final String parentID;
 
-    Shard(int parentID, T dataPiece) {
+    Shard(String parentID, T dataPiece) {
         this.parentID = parentID;
         saveDataPiece(dataPiece);
     }
@@ -23,7 +23,7 @@ abstract public class Shard<T> {
      */
     abstract protected void saveDataPiece(T dataPieces);
 
-    public int getParentID() {
+    public String getParentID() {
         return parentID;
     }
 }

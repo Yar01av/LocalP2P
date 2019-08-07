@@ -1,28 +1,25 @@
 package files;
 
 import com.sun.istack.internal.NotNull;
-import files.shards.UnitShard;
-import files.shards.Shard;
+import shards.Shard;
+import shards.UnitShard;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /*
 * Represents a file using an array of char.
 * TODO: generalize the type of array files
  */
-class CharFile extends File {
+public class SimpleCharFile extends File {
     private final char[] content;
-    protected final int DEFAULT_LENGTH = 100;
 
-    public CharFile() {
-        content = new char[DEFAULT_LENGTH];
-    }
-
-    public CharFile(int size) {
+    public SimpleCharFile(int size) {
         content = new char[size];
     }
 
-    public CharFile(@NotNull char[] content) {
+    public SimpleCharFile(@NotNull char[] content) {
         this.content = content.clone();
     }
 
@@ -66,8 +63,23 @@ class CharFile extends File {
     }
 
     @Override
-    UnitShard[] splitToShards(int nOutput) {
-        return null;
+    public Shard getEmptyShard() {
+        Random random = new Random();
+        List<Integer> listOfNullVals = new ArrayList<>();
+
+        //Find all undefined places
+        for (int i = 0; i < content.length; i++) {
+            if (content[i] == (char) 0) listOfNullVals.add(i);
+        }
+
+        int randomIndex = random.nextInt(listOfNullVals.size()); //Choose a random empty place
+
+        return new UnitShard<Integer>(id, listOfNullVals.get(randomIndex));
+    }
+
+    @Override
+    public int getSize() {
+        return content.length;
     }
 
     @Override

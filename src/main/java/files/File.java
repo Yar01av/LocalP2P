@@ -1,7 +1,6 @@
 package files;
 
-import files.shards.UnitShard;
-import files.shards.Shard;
+import shards.Shard;
 
 import java.util.UUID;
 
@@ -10,14 +9,14 @@ import java.util.UUID;
 * It is assumed that the file can be represented by a sequence. and the id needs to be unique. A denotes the type of
 * that sequence.
  */
-abstract class File {
-    private final String id;
+abstract public class File {
+    protected final String id;
 
     /*
     * Constructor to be used for creating completely new files
     */
     File() {
-        id = UUID.randomUUID().toString();
+        id = "File-" + UUID.randomUUID().toString();
     }
 
     /*
@@ -34,28 +33,32 @@ abstract class File {
     /*
     * Gets the file for later use outside of the program.
      */
-    public abstract java.io.File extractFile();
+    abstract public java.io.File extractFile();
 
     /*
     * How much of a complete file does this instance contain.
      */
-    public abstract double portionComplete();
+    abstract public double portionComplete();
 
     /*
     * Sets the content of the file
     *
     * @param data - part of the complete file to use
      */
-    public abstract void setContent(Shard data);
-
-    public abstract Shard getShard();
+    abstract public void setContent(Shard data);
 
     /*
-     * Splits the file into shards for distribution
-     *
-     * @param file - file to split
-     * @param nOutput - number of shards to split into
-     * @output - List of shards
+    * Copies a piece of file for distribution.
      */
-    abstract UnitShard[] splitToShards(int nOutput);
+    abstract public Shard getShard() throws IllegalStateException;
+
+    /*
+     * Wraps an empty piece of file in a shard (e.g. index of one of nulls if the file is an array)
+     */
+    abstract public Shard getEmptyShard() throws IllegalStateException;
+
+    /*
+    * Returns the number of elements in the underlying sequence
+     */
+    abstract public int getSize();
 }
