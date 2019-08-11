@@ -2,15 +2,18 @@ package files;
 
 import shards.Shard;
 
+import java.util.Collection;
 import java.util.UUID;
 
 /*
 * File encapsulates the data being distibuted by the network. This can for instance be .txt files or byte arrays.
-* It is assumed that the file can be represented by a sequence. and the id needs to be unique. A denotes the type of
-* that sequence.
+* It is assumed that the file can be represented by a sequence. and the id needs to be unique. T denotes the type of
+* elements that the sequence consists of.
  */
-abstract public class File {
-    protected final String id;
+abstract public class File<T> {
+    // TODO: make it possible to extract data from the file about what is filled and what isn't
+
+    private final String id;
 
     /*
     * Constructor to be used for creating completely new files
@@ -48,17 +51,11 @@ abstract public class File {
     abstract public void setContent(Shard data);
 
     /*
-    * Copies a piece of file for distribution.
-     */
-    abstract public Shard getShard() throws IllegalStateException;
-
-    /*
-     * Wraps an empty piece of file in a shard (e.g. index of one of nulls if the file is an array)
-     */
-    abstract public Shard getEmptyShard() throws IllegalStateException;
-
-    /*
     * Returns the number of elements in the underlying sequence
      */
     abstract public int getSize();
+
+    abstract public T getElementAt(int index);
+
+    abstract public void setElemntAt(int index, T element);
 }

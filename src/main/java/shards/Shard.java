@@ -16,7 +16,7 @@ abstract public class Shard<T> {
     /*
     * Returns the data contained to be used in files
      */
-    abstract T getData();
+    abstract public T getData();
 
     /*
     * Initializes the data carried by the shard.

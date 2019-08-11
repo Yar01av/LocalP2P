@@ -13,7 +13,7 @@ public class UnitShard<T> extends Shard<T> {
     }
 
     @Override
-    T getData() {
+    public T getData() {
         return ObjectUtils.cloneIfPossible(data);
     }
 
