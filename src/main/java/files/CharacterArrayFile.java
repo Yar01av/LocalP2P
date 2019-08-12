@@ -1,9 +1,7 @@
 package files;
 
-import com.sun.istack.internal.NotNull;
 import shards.Shard;
 import shards.UnitShard;
-
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -18,11 +16,20 @@ public class CharacterArrayFile extends File<Character> {
         content = new Character[size];
     }
 
-    public CharacterArrayFile(@NotNull Character[] content) {
+    public CharacterArrayFile(Character[] content) {
         this.content = content.clone();
     }
 
-    void fillFileWith(@NotNull Collection<Character> content) {
+    /*
+    * Derivative constructor that creates an empty copy of the file
+    * //TODO: replace with a .cleanCopy() method
+     */
+    public CharacterArrayFile(File file) {
+        super(file.getId());
+        this.content = new Character[file.getSize()];
+    }
+
+    void fillFileWith(Collection<Character> content) {
         moveContent(content, this.content);
     }
 
@@ -40,11 +47,11 @@ public class CharacterArrayFile extends File<Character> {
     public double portionComplete() {
         int nullCount = 0;
 
-        for (char ch : content) {
-            if (checkNull(ch)) nullCount++;
+        for (Character ch : content) {
+            if (ch == null) nullCount++;
         }
 
-        return nullCount;
+        return ((double) nullCount)/content.length;
     }
 
     private boolean checkNull(char ch) {
@@ -87,7 +94,7 @@ public class CharacterArrayFile extends File<Character> {
     }
 
     @Override
-    public void setElemntAt(int index, Character element) {
+    public void setElementAt(int index, Character element) {
         content[index] = element;
     }
 

@@ -2,7 +2,9 @@ package files;
 
 import shards.Shard;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -57,5 +59,15 @@ abstract public class File<T> {
 
     abstract public T getElementAt(int index);
 
-    abstract public void setElemntAt(int index, T element);
+    abstract public void setElementAt(int index, T element);
+
+    public List<T> getListOfContent() {
+        List<T> output = new ArrayList<>();
+
+        for (int i = 0; i < getSize(); i++) {
+            output.add(getElementAt(i));
+        }
+
+        return output;
+    }
 }

@@ -1,6 +1,5 @@
 import files.File;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 import shards.UnitShard;
 
 /*
@@ -12,4 +11,7 @@ public abstract class UnitExchangePeer extends Peer {
      * undefined.
      */
     abstract <T> UnitShard<T> acceptHoleMessage(UnitShard<Integer> incomingMessage);
+
+    //TODO: lift up if possible
+    abstract public void assignPartner(UnitExchangePeer peer);
 }

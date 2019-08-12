@@ -1,17 +1,18 @@
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /*
 * Simple server that exists locally with all the peers
  */
 class ToyServer extends Server {
-    private final ArrayList<Peer> peers;
+    private final List<Peer> peers;
 
     ToyServer() {
         peers = new ArrayList<Peer>();
     }
 
-    ToyServer(ArrayList<Peer> initPeers) {
+    ToyServer(List<Peer> initPeers) {
         peers = initPeers;
     }
 
@@ -32,7 +33,7 @@ class ToyServer extends Server {
     @Override
     void run() {
         for (Peer p : peers) {
-            p.run();
+            new Thread(p).start();
         }
     }
 }
