@@ -1,21 +1,24 @@
-import java.util.ArrayList;
-import java.util.Collection;
+package servers;
+
+import peers.Peer;
+
+import java.util.List;
 
 /*
 * The instance coordinates everything that needs to be done centrally. It must know about all peers in the network.
  */
-abstract class Server {
+public abstract class Server {
     /*
     * Distributes the addresses/reference of one other peer to every peer it knows
      */
-    abstract void distributeAddresses();
+    public abstract void distributeAddresses();
 
-    abstract void addNewPeer(Peer peer);
+    public abstract void addNewPeer(Peer peer);
 
-    abstract ArrayList<Peer> getPeers();
+    public abstract List<Peer> getPeers();
 
     /*
     * Activates the peers and makes them run in parallel.
      */
-    abstract void run();
+    public abstract void run() throws InterruptedException;
 }

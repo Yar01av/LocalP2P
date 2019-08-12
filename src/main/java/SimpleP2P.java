@@ -1,5 +1,10 @@
 import files.CharacterArrayFile;
 import files.File;
+import peers.Peer;
+import peers.SimplePeer;
+import peers.UnitExchangePeer;
+import servers.Server;
+import servers.ToyServer;
 
 import java.util.ArrayList;
 
@@ -22,6 +27,10 @@ public class SimpleP2P {
 
         Server server = new ToyServer(peers);
         server.distributeAddresses();
-        server.run();
+        try {
+            server.run();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

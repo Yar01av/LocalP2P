@@ -1,9 +1,11 @@
-import files.File;
-import org.apache.commons.lang3.tuple.Pair;
+package peers;
+
 import shards.UnitShard;
 
 /*
-* A peer that sends the index of an element in the file and expects that
+* A peer that sends the index of an element in the file and expects that of other peers. It only communicates with other
+* UnitExchangePeer's snd it exchanges data in a form of UnitShards. Knowledge of a new file is distributes by asking the
+* partners.
  */
 public abstract class UnitExchangePeer extends Peer {
     /*
@@ -11,6 +13,8 @@ public abstract class UnitExchangePeer extends Peer {
      * undefined.
      */
     abstract <T> UnitShard<T> acceptHoleMessage(UnitShard<Integer> incomingMessage);
+
+    abstract public void getFilesKnowledge();
 
     //TODO: lift up if possible
     abstract public void assignPartner(UnitExchangePeer peer);

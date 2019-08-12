@@ -131,4 +131,13 @@ public class CharacterArrayFile extends File<Character> {
 
         moveContent(listFrom, to);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CharacterArrayFile) {
+            return Arrays.equals(((CharacterArrayFile) obj).content, this.content);
+        } else {
+            return super.equals(obj);
+        }
+    }
 }

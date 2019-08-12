@@ -1,3 +1,5 @@
+package peers;
+
 import files.File;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -7,9 +9,10 @@ import shards.UnitShard;
 import java.util.*;
 
 /*
-* Simple peer that runs within the same program as the other peers and can refer to them by reference.
+* Simple peer that runs within the same program as the other peers and can refer to them by reference. It exchanges data
+* in a form of UnitShards. Knowledge of a new file is d
  */
-class SimplePeer extends UnitExchangePeer {
+public class SimplePeer extends UnitExchangePeer {
     //private int N_PARTNERS = 3;
     private List<File> personalFiles = new ArrayList<>();
     private List<UnitExchangePeer> partners = new ArrayList<>();
@@ -18,7 +21,7 @@ class SimplePeer extends UnitExchangePeer {
     @Override
     void printStatus() {
         for (File f : personalFiles) {
-            System.out.println("Peer (" + getId() + ") has " + (1.0 - f.portionComplete()) + " of " + f.getId());
+            System.out.println("peers.Peer (" + getId() + ") has " + (1.0 - f.portionComplete()) + " of " + f.getId());
         }
     }
 
@@ -53,6 +56,11 @@ class SimplePeer extends UnitExchangePeer {
         personalFiles.add(file);
     }
 
+    @Override
+    public List<File> getStoredFiles() {
+        return new ArrayList<>(personalFiles);
+    }
+
     /*
      * Accept a request for a piece of the file<T> and returns either that piece or null if that location is undefined
      */
@@ -70,6 +78,11 @@ class SimplePeer extends UnitExchangePeer {
         }
 
         return new UnitShard<T>(incomingMessage.getParentID(), returnData);
+    }
+
+    @Override
+    public void getFilesKnowledge() {
+
     }
 
     //Find the piece of file<T> that is not in set in this file but is set in that of partner with the same id
@@ -112,7 +125,7 @@ class SimplePeer extends UnitExchangePeer {
 
         //Loop over timesteps
         for (int i = 0; i < N_STEPS_TO_TERMINATION; i++) {
-            System.out.println("Peer (" + getId() + ") is going for another round.");
+            System.out.println("peers.Peer (" + getId() + ") is going for another round.");
 
             //Loop over the files possessed by the peer
             for (File file : personalFiles) {
@@ -123,7 +136,7 @@ class SimplePeer extends UnitExchangePeer {
         }
 
         for (File f : personalFiles) {
-            System.out.println("Peer (" + getId() + ") has " + (1.0 - f.portionComplete()) + " of " + f.getId());
+            System.out.println("peers.Peer (" + getId() + ") has " + (1.0 - f.portionComplete()) + " of " + f.getId());
         }
     }
 
@@ -136,6 +149,8 @@ class SimplePeer extends UnitExchangePeer {
                 if (compElement == null) {
                     break;
                 }
+
+                file.setElementAt(compElement.getLeft(), compElement.getRight());
 
                 printStatus();
             }
