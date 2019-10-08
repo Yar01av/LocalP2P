@@ -2,10 +2,7 @@ package files;
 
 import shards.Shard;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /*
 * File encapsulates the data being distibuted by the network. This can for instance be .txt files or byte arrays.
@@ -46,13 +43,6 @@ abstract public class File<T> {
     abstract public double portionComplete();
 
     /*
-    * Sets the content of the file
-    *
-    * @param data - part of the complete file to use
-     */
-    abstract public void setContent(Shard data);
-
-    /*
     * Returns the number of elements in the underlying sequence
      */
     abstract public int getSize();
@@ -69,5 +59,20 @@ abstract public class File<T> {
         }
 
         return output;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof File) {
+            for (int i = 0; i < ((File) obj).getSize(); i++) {
+                if (((File) obj).getElementAt(i) != getElementAt(i)) {
+                    return false;
+                }
+            }
+
+            return true;
+        } else {
+            return super.equals(obj);
+        }
     }
 }

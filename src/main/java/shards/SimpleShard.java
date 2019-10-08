@@ -2,13 +2,10 @@ package shards;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-/*
-* Shard that carries a single object inside of it.
- */
-public class UnitShard<T> extends Shard<T> {
+public class SimpleShard<T> extends Shard<T> {
     private T data;
 
-     public UnitShard(String parentID, T dataPieces) {
+     public SimpleShard(String parentID, T dataPieces) {
         super(parentID, dataPieces);
     }
 

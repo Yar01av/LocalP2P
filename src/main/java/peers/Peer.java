@@ -5,6 +5,7 @@ import shards.Shard;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /*
@@ -20,17 +21,17 @@ public abstract class Peer implements Runnable {
 
     abstract void printStatus();
 
-    abstract Collection<String> getPartnersIDs();
-
-    abstract void generateFile();
-
     abstract public List<String> getFilesIDs();
 
-    //TODO: Replace with the protocol
     /*
     * Grants this peer a file. It is assumed that the file consists of at least one element
      */
     abstract public void acceptFile(File file);
+
+    /*
+     * Returns a set of files such that the files do not have content.
+     */
+    abstract public Shard<Set<File>> getFilesKnowledge();
 
     public String getId() {
         return id;

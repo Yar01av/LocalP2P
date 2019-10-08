@@ -39,7 +39,6 @@ abstract public class DistributionTest {
         File file = getFile();
 
         p1.acceptFile(file);
-        p2.acceptFile(clearCopyFile(file));
 
         p2.assignPartner(p1);
 
@@ -62,8 +61,6 @@ abstract public class DistributionTest {
         File file = getFile();
 
         p1.acceptFile(file);
-        p2.acceptFile(clearCopyFile(file));
-        p3.acceptFile(clearCopyFile(file));
 
         p2.assignPartner(p1);
         p3.assignPartner(p1);
@@ -87,7 +84,6 @@ abstract public class DistributionTest {
         File file = getFile();
 
         p1.acceptFile(file);
-        p2.acceptFile(clearCopyFile(file));
 
         p1.assignPartner(p2);
         p2.assignPartner(p1);
@@ -111,8 +107,6 @@ abstract public class DistributionTest {
         File file = getFile();
 
         p1.acceptFile(file);
-        p2.acceptFile(clearCopyFile(file));
-        p3.acceptFile(clearCopyFile(file));
 
         p2.assignPartner(p1);
         p1.assignPartner(p2);
@@ -140,8 +134,6 @@ abstract public class DistributionTest {
         File file = getFile();
 
         p1.acceptFile(file);
-        p2.acceptFile(clearCopyFile(file));
-        p3.acceptFile(clearCopyFile(file));
 
         p2.assignPartner(p1);
         p3.assignPartner(p2);
@@ -150,6 +142,30 @@ abstract public class DistributionTest {
         server.addNewPeer(p1);
         server.addNewPeer(p2);
         server.addNewPeer(p3);
+
+        server.run();
+
+        comparePeers(server.getPeers());
+    }
+
+    //1 to 1 in parallel with the other way around
+    @Test
+    public void transferTest6() throws InterruptedException {
+        List<Peer> peers = new ArrayList<>();
+
+        UnitExchangePeer p1 = getPeer();
+        UnitExchangePeer p2 = getPeer();
+        File file1 = getFile();
+        File file2 = getFile();
+
+        p1.acceptFile(file1);
+        p2.acceptFile(file2);
+
+        p1.assignPartner(p2);
+        p2.assignPartner(p1);
+
+        server.addNewPeer(p1);
+        server.addNewPeer(p2);
 
         server.run();
 

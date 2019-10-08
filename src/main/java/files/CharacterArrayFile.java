@@ -1,8 +1,7 @@
 package files;
 
 import shards.Shard;
-import shards.UnitShard;
-import java.lang.reflect.Array;
+
 import java.util.*;
 
 /*
@@ -59,31 +58,6 @@ public class CharacterArrayFile extends File<Character> {
     }
 
     @Override
-    public void setContent(Shard data) {
-
-    }
-
-//    @Override
-//    public Shard getShard() {
-//        return null;
-//    }
-//
-//    @Override
-//    public Shard getEmptyShard() {
-//        Random random = new Random();
-//        List<Integer> listOfNullVals = new ArrayList<>();
-//
-//        //Find all undefined places
-//        for (int i = 0; i < content.length; i++) {
-//            if (content[i] == (char) 0) listOfNullVals.add(i);
-//        }
-//
-//        int randomIndex = random.nextInt(listOfNullVals.size()); //Choose a random empty place
-//
-//        return new UnitShard<Integer>(id, listOfNullVals.get(randomIndex));
-//    }
-
-    @Override
     public int getSize() {
         return content.length;
     }
@@ -132,12 +106,12 @@ public class CharacterArrayFile extends File<Character> {
         moveContent(listFrom, to);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CharacterArrayFile) {
-            return Arrays.equals(((CharacterArrayFile) obj).content, this.content);
-        } else {
-            return super.equals(obj);
-        }
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (obj instanceof CharacterArrayFile) {
+//            return Arrays.equals(((CharacterArrayFile) obj).content, this.content);
+//        } else {
+//            return super.equals(obj);
+//        }
+//    }
 }

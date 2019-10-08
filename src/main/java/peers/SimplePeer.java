@@ -4,35 +4,21 @@ import files.File;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import shards.Shard;
-import shards.UnitShard;
+import shards.SimpleShard;
 
 import java.util.*;
 
-/*
-* Simple peer that runs within the same program as the other peers and can refer to them by reference. It exchanges data
-* in a form of UnitShards. Knowledge of a new file is d
- */
+//TODO: lift up as much as possible
 public class SimplePeer extends UnitExchangePeer {
     //private int N_PARTNERS = 3;
-    private List<File> personalFiles = new ArrayList<>();
+    private Set<File> personalFiles = new HashSet<>();
     private List<UnitExchangePeer> partners = new ArrayList<>();
-    private final int N_STEPS_TO_TERMINATION = 100;
 
     @Override
     void printStatus() {
         for (File f : personalFiles) {
             System.out.println("peers.Peer (" + getId() + ") has " + (1.0 - f.portionComplete()) + " of " + f.getId());
         }
-    }
-
-    @Override
-    Collection<String> getPartnersIDs() {
-        return null;
-    }
-
-    @Override
-    void generateFile() {
-
     }
 
     @Override
@@ -61,11 +47,17 @@ public class SimplePeer extends UnitExchangePeer {
         return new ArrayList<>(personalFiles);
     }
 
+    @Override
+    public List<UnitExchangePeer> getPartners() {
+        //It is important to not clone the partners!
+        return partners;
+    }
+
     /*
      * Accept a request for a piece of the file<T> and returns either that piece or null if that location is undefined
      */
     @Override
-    <T> UnitShard<T> acceptHoleMessage(UnitShard<Integer> incomingMessage) {
+    <T> SimpleShard<T> acceptHoleMessage(SimpleShard<Integer> incomingMessage) {
         int desiredIndex;
         T returnData = null;
 
@@ -77,12 +69,36 @@ public class SimplePeer extends UnitExchangePeer {
             }
         }
 
-        return new UnitShard<T>(incomingMessage.getParentID(), returnData);
+        return new SimpleShard<T>(incomingMessage.getParentID(), returnData);
     }
 
     @Override
-    public void getFilesKnowledge() {
+    public Shard<Set<File>> getFilesKnowledge() {
+        return new SimpleShard<Set<File>>(getId(), new HashSet<File>(personalFiles));
+    }
 
+    protected void gainFilesKnowledgeFrom(List<? extends Peer> peers) {
+        for (Peer peer : peers) {
+            Set<File> filesKnownByPeer = peer.getFilesKnowledge().getData();
+
+            personalFiles.addAll(setDifferenceOnID(filesKnownByPeer, personalFiles));
+        }
+    }
+
+    //Set operation A - B
+    private Set<File> setDifferenceOnID(Set<File> A, Set<File> B) {
+        A = new HashSet<>(A);
+        B = new HashSet<>(B);
+
+        for (File f1 : A) {
+            for (File f2 : B) {
+                if (f1.getId().equals(f2.getId())) {
+                    A.remove(f1);
+                }
+            }
+        }
+
+        return A;
     }
 
     //Find the piece of file<T> that is not in set in this file but is set in that of partner with the same id
@@ -92,7 +108,7 @@ public class SimplePeer extends UnitExchangePeer {
 
         //Request all null locations until successful response
         for (int i : nullElemsLocations) {
-            UnitShard<Integer> emptyLocation = new UnitShard<>(file.getId(), i);
+            SimpleShard<Integer> emptyLocation = new SimpleShard<>(file.getId(), i);
             Shard<T> response = partner.acceptHoleMessage(emptyLocation);
 
             if (response != null) {
@@ -119,29 +135,8 @@ public class SimplePeer extends UnitExchangePeer {
         return nullElemsLocations;
     }
 
-    @Override
-    public void run() {
-        System.out.println("Starting peer - " + getId());
-
-        //Loop over timesteps
-        for (int i = 0; i < N_STEPS_TO_TERMINATION; i++) {
-            System.out.println("peers.Peer (" + getId() + ") is going for another round.");
-
-            //Loop over the files possessed by the peer
-            for (File file : personalFiles) {
-                if (file.portionComplete() > 0.0) {
-                    collectFromPartners(file, partners);
-                }
-            }
-        }
-
-        for (File f : personalFiles) {
-            System.out.println("peers.Peer (" + getId() + ") has " + (1.0 - f.portionComplete()) + " of " + f.getId());
-        }
-    }
-
     //Get data about the file from the partners
-    private void collectFromPartners(File file, List<UnitExchangePeer> partners) {
+    protected void collectFromPartners(File file, List<? extends UnitExchangePeer> partners) {
         for (UnitExchangePeer peer : partners) {
             if (peer.getFilesIDs().contains(file.getId())) {
                 Pair<Integer, Object> compElement = getComplementaryElemWithLoc(file, peer);
